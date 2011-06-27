@@ -4,7 +4,7 @@ Opens selected serial port and reads two lines.
 '''
 
 import serial
-import time
+#import time
 import random
 import string
 
@@ -60,9 +60,15 @@ if __name__ == '__main__':
     #port openning (verbose)
     print('Openning serial port: %s' % list_of_ports[port0_num][1])
     with serial.Serial(list_of_ports[port0_num][1],interCharTimeout=0.2,timeout=2.0,baudrate=4800) as serial_port:
-        #time.sleep(2.0)
-        print(serial_port.readline())
-        print(serial_port.readline())
-        pass
+        serial_port.readline() #waste the first line
+        #test the second line
+        try:
+            line = str(serial_port.readline().rstrip(),encoding='ascii')
+            if line[0:4]=='$GPG':
+                print(line)
+            else:
+                print('No GPS data')
+        except:
+            print('No valid ascii string')
 
     print('Finished ...')
